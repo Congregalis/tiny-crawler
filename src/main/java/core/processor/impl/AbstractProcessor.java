@@ -37,6 +37,12 @@ public abstract class AbstractProcessor implements Processor {
             String nextUrl = !element.baseUri().equals("") ? element.attr("abs:href") : element.attr("href");
             if (!nextUrl.equals("") && linkSet.add(Md5Util.getInstance().md5(nextUrl))) links.add(nextUrl);
         }
+
+        links.removeIf(url -> !filter.match(url));
         page.setNextSeeds(links);
+    }
+
+    public void addRule(String rule) {
+        filter.addRule(rule);
     }
 }

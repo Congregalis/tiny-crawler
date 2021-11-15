@@ -77,6 +77,11 @@ public class Crawler {
         return this;
     }
 
+    public Crawler addRule(String rule) {
+        processor.addRule(rule);
+        return this;
+    }
+
     public void run() {
 
         while (true) {

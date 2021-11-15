@@ -1,6 +1,6 @@
 package core.downloader.impl;
 
-import core.Page;
+import core.model.Page;
 import core.downloader.Downloader;
 import core.util.HttpUtil;
 

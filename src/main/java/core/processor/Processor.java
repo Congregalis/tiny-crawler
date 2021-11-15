@@ -1,6 +1,6 @@
 package core.processor;
 
-import core.Page;
+import core.model.Page;
 
 public interface Processor {
 

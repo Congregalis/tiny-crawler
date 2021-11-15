@@ -1,6 +1,6 @@
 package core.downloader;
 
-import core.Page;
+import core.model.Page;
 
 public interface Downloader {
 

@@ -1,6 +1,6 @@
 package core.processor.impl;
 
-import core.Page;
+import core.model.Page;
 import org.jsoup.nodes.Document;
 import java.util.HashMap;
 import java.util.Map;

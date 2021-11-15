@@ -1,6 +1,6 @@
 package core.processor.impl;
 
-import core.Page;
+import core.model.Page;
 import core.processor.Processor;
 import core.util.Md5Util;
 import org.jsoup.Jsoup;

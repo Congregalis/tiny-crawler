@@ -1,6 +1,6 @@
 package core.saver;
 
-import core.Page;
+import core.model.Page;
 
 public interface Saver {
 

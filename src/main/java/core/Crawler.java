@@ -2,6 +2,7 @@ package core;
 
 import core.downloader.Downloader;
 import core.downloader.impl.HttpClientDownloader;
+import core.model.Page;
 import core.processor.Processor;
 import core.processor.impl.SimpleTextProcessor;
 import core.saver.Saver;

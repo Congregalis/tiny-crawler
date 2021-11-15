@@ -1,4 +1,4 @@
-package core;
+package core.model;
 
 import org.jsoup.nodes.Document;
 

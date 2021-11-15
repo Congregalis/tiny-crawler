@@ -1,6 +1,6 @@
 package core.saver.impl;
 
-import core.Page;
+import core.model.Page;
 import core.saver.Saver;
 
 import java.util.Map;

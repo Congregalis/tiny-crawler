@@ -103,6 +103,14 @@ public class Crawler {
                     saver.save(currPage);
                 });
             }
+
+            // todo: 用锁使在下一次循环前已有 seed 进入到 scheduler 中，否则会导致主线程提前结束
+            // 此处暂时用延时模拟并发情况下的锁
+            try {
+                TimeUnit.MILLISECONDS.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

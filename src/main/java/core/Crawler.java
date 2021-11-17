@@ -28,7 +28,7 @@ public class Crawler {
     private Saver saver;
 
     private int threadNum = 5;
-    private int exitSleepTime = 5000;
+    private int exitSleepTime = 30;
     private ThreadPoolExecutor poolExecutor;
     private final Lock newSeedLock = new ReentrantLock();
     private final Condition newSeedCondition = newSeedLock.newCondition();
@@ -99,15 +99,19 @@ public class Crawler {
     /**
      * 等待新的 seed 加入队列，使主线程阻塞在此
      */
-    public void waitNewSeed() {
+    public boolean waitNewSeed() {
+        long res = 0;
         newSeedLock.lock();
         try {
-            newSeedCondition.await(exitSleepTime, TimeUnit.MILLISECONDS);
+//            res = newSeedCondition.await(exitSleepTime, TimeUnit.MILLISECONDS);
+            res = newSeedCondition.awaitNanos(TimeUnit.SECONDS.toNanos(exitSleepTime));
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
             newSeedLock.unlock();
         }
+
+        return res <= 0;
     }
 
     /**
@@ -127,10 +131,14 @@ public class Crawler {
         logger.info("爬虫启动！");
 
         while (true) {
-            logger.debug("目前有 {} 个线程正在工作，已完成 {} 个任务，队列中还有 {} 个任务。", poolExecutor.getActiveCount(), poolExecutor.getCompletedTaskCount(), poolExecutor.getQueue().size());
             String seed = scheduler.poll();
             if (seed == null && poolExecutor.getActiveCount() == 0) {
-                logger.info("爬虫工作完成，正在退出...");
+                if (!waitNewSeed()) {
+                    logger.debug("目前有 {} 个线程正在工作，已完成 {} 个任务，队列中还有 {} 个任务。", poolExecutor.getActiveCount(), poolExecutor.getCompletedTaskCount(), poolExecutor.getQueue().size());
+                    continue;
+                }
+
+                logger.info("{} 秒内没有收到新的seed，爬虫工作完成，正在退出...", exitSleepTime);
                 poolExecutor.shutdown();
                 break;
             } else if (seed == null) {
@@ -140,8 +148,8 @@ public class Crawler {
                     e.printStackTrace();
                 }
             } else {
-                logger.debug("当前正在爬取：{}", seed);
                 poolExecutor.execute(() -> {
+                    logger.debug("当前正在爬取：{}", seed);
                     Page currPage = downloader.download(seed);
                     processor.process(currPage);
                     currPage.getNextSeeds().forEach(url -> scheduler.offer(url));
@@ -149,8 +157,6 @@ public class Crawler {
                     saver.save(currPage);
                 });
             }
-
-            waitNewSeed();
         }
     }
 }

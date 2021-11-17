@@ -9,6 +9,8 @@ import core.saver.Saver;
 import core.saver.impl.ConsoleSaver;
 import core.scheduler.Scheduler;
 import core.scheduler.impl.QueueScheduler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -18,6 +20,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Crawler {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private Scheduler scheduler;
     private Downloader downloader;
@@ -121,10 +124,13 @@ public class Crawler {
     }
 
     public void run() {
+        logger.info("爬虫启动！");
 
         while (true) {
+            logger.debug("目前有 {} 个线程正在工作，已完成 {} 个任务，队列中还有 {} 个任务。", poolExecutor.getActiveCount(), poolExecutor.getCompletedTaskCount(), poolExecutor.getQueue().size());
             String seed = scheduler.poll();
             if (seed == null && poolExecutor.getActiveCount() == 0) {
+                logger.info("爬虫工作完成，正在退出...");
                 poolExecutor.shutdown();
                 break;
             } else if (seed == null) {
@@ -134,6 +140,7 @@ public class Crawler {
                     e.printStackTrace();
                 }
             } else {
+                logger.debug("当前正在爬取：{}", seed);
                 poolExecutor.execute(() -> {
                     Page currPage = downloader.download(seed);
                     processor.process(currPage);

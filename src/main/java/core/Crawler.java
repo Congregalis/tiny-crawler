@@ -13,6 +13,9 @@ import core.scheduler.impl.QueueScheduler;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Crawler {
 
@@ -22,7 +25,10 @@ public class Crawler {
     private Saver saver;
 
     private int threadNum = 5;
+    private int exitSleepTime = 5000;
     private ThreadPoolExecutor poolExecutor;
+    private final Lock newSeedLock = new ReentrantLock();
+    private final Condition newSeedCondition = newSeedLock.newCondition();
 
     private Crawler() {
         init();
@@ -72,6 +78,11 @@ public class Crawler {
         return this;
     }
 
+    public Crawler setExitSleepTime(int time) {
+        exitSleepTime = time;
+        return this;
+    }
+
     public Crawler addSeed(String url) {
         scheduler.offer(url);
         return this;
@@ -80,6 +91,33 @@ public class Crawler {
     public Crawler addRule(String rule) {
         processor.addRule(rule);
         return this;
+    }
+
+    /**
+     * 等待新的 seed 加入队列，使主线程阻塞在此
+     */
+    public void waitNewSeed() {
+        newSeedLock.lock();
+        try {
+            newSeedCondition.await(exitSleepTime, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            newSeedLock.unlock();
+        }
+    }
+
+    /**
+     * 已取得可能有的新 seed，唤醒主线程
+     */
+    public void signalNewSeed() {
+        newSeedLock.lock();
+        try {
+            newSeedCondition.signal();
+        } finally {
+            newSeedLock.unlock();
+        }
+
     }
 
     public void run() {
@@ -100,17 +138,12 @@ public class Crawler {
                     Page currPage = downloader.download(seed);
                     processor.process(currPage);
                     currPage.getNextSeeds().forEach(url -> scheduler.offer(url));
+                    signalNewSeed();
                     saver.save(currPage);
                 });
             }
 
-            // todo: 用锁使在下一次循环前已有 seed 进入到 scheduler 中，否则会导致主线程提前结束
-            // 此处暂时用延时模拟并发情况下的锁
-            try {
-                TimeUnit.MILLISECONDS.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            waitNewSeed();
         }
     }
 }

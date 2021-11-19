@@ -27,14 +27,14 @@
   <p align="center">
     小而实用的 Java 爬虫框架，主要用于学习爬虫框架的运作原理。
     <br />
-    <a href="https://github.com/Congregalis/tiny-crawler"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/Congregalis/tiny-crawler"><strong>查看文档 »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Congregalis/tiny-crawler">View Demo</a>
+    <a href="https://github.com/Congregalis/tiny-crawler/README.md#用法">演示</a>
     ·
-    <a href="https://github.com/Congregalis/tiny-crawler/issues">Report Bug</a>
+    <a href="https://github.com/Congregalis/tiny-crawler/issues">提交 Bug</a>
     ·
-    <a href="https://github.com/Congregalis/tiny-crawler/issues">Request Feature</a>
+    <a href="https://github.com/Congregalis/tiny-crawler/issues">增加需求</a>
   </p>
 </div>
 
@@ -42,34 +42,34 @@
 
 <!-- TABLE OF CONTENTS -->
 <details>
-  <summary>Table of Contents</summary>
+  <summary>目录</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
+      <a href="#关于本项目">关于本项目</a>
       <ul>
-        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#环境">环境</a></li>
       </ul>
     </li>
     <li>
-      <a href="#getting-started">Getting Started</a>
+      <a href="#使用本项目">使用本项目</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#前置条件">前置条件</a></li>
+        <li><a href="#安装项目">安装项目</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#用法">用法</a></li>
+    <li><a href="#下一步工作">下一步工作</a></li>
+    <li><a href="#参与贡献">参与贡献</a></li>
+    <li><a href="#开源协议">开源协议</a></li>
+    <li><a href="#联系方式">联系方式</a></li>
+    <li><a href="#感谢">感谢</a></li>
   </ol>
 </details>
 
 
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+## 关于本项目
 
 ![Product Name Screen Shot](https://congregalis.github.io/img/tiny-crawler/crawler_structure.png)
 
@@ -82,7 +82,7 @@
 
 
 
-### Built With
+### 环境
 
 * Java
 * Maven
@@ -92,24 +92,24 @@
 
 
 <!-- GETTING STARTED -->
-## Getting Started
+## 使用本项目
 
-以下步骤帮助你在本地安装并运行本项目。
+以下步骤帮助您在本地安装并运行本项目。
 
-### Prerequisites
+### 前置条件
 
 * java
 * maven
 
-### Installation
+### 安装项目
 
 克隆该仓库
 ```sh
-git clone https://github.com/github_username/repo_name.git
+git clone https://github.com/Congregalis/tiny-crawler.git
 ```
 
 <!-- USAGE EXAMPLES -->
-## Usage
+## 用法
 
 爬取[我博客](https://congregalis.github.io/)中的所有文章对应的标题和正文示例如下：
 ```java
@@ -120,6 +120,7 @@ String dateRegex = "(?:(?!0000)[0-9]{4}([-/.]?)(?:(?:0?[1-9]|1[0-2])\\1(?:0?[1-9
 
 Crawler.build().addSeed(seed).addRule("https://congregalis.github.io/" + dateRegex + "/.*/").run();
 ```
+![结果](images/example_blog.png)
 
 <!-- _For more examples, please refer to the [Documentation](https://example.com)_ -->
 
@@ -128,9 +129,9 @@ Crawler.build().addSeed(seed).addRule("https://congregalis.github.io/" + dateReg
 
 
 <!-- ROADMAP -->
-## Roadmap
+## 下一步工作
 
-Building...
+还没想好，欢迎提 issue。
 <!-- - [] Feature 1
 - [] Feature 2
 - [] Feature 3
@@ -143,7 +144,7 @@ See the [open issues](https://github.com/github_username/repo_name/issues) for a
 
 
 <!-- CONTRIBUTING -->
-## Contributing
+## 参与贡献
 
 贡献使开源社区成为学习、启发和创造的绝佳场所。 **非常感谢您做出的任何贡献**。
 
@@ -151,38 +152,38 @@ See the [open issues](https://github.com/github_username/repo_name/issues) for a
 
 别忘了给项目打星星！谢谢您！
 
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+1. Fork 这个项目
+2. 创建你的分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交你的修改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推到你创建的分支上 (`git push origin feature/AmazingFeature`)
+5. 提交PR (Pull Request)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
 <!-- LICENSE -->
-## License
+## 开源协议
 
-Distributed under the MIT License. See `LICENSE.txt` for more information.
+基于 MIT 协议。更多信息请查看 `LICENSE.txt` 。
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
 <!-- CONTACT -->
-## Contact
+## 联系方式
 
 Congregalis - 2056843452@qq.com
 
-Project Link: [https://github.com/Congregalis/tiny-crawler](https://github.com/Congregalis/tiny-crawler)
+项目地址: [https://github.com/Congregalis/tiny-crawler](https://github.com/Congregalis/tiny-crawler)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
 <!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
+## 感谢
 
 * [WebMagic](https://github.com/code4craft/webmagic)
 * [ScriptSpider](https://github.com/xjtushilei/ScriptSpider)

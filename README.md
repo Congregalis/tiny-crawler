@@ -146,8 +146,8 @@ Crawler.build().addSeed(seed).addRule("https://congregalis.github.io/" + dateReg
 <!-- ROADMAP -->
 ## 下一步工作
 
-- [] 引入 domain 来限制最主要的爬取范围，这不同于规则，见 [issue#1](https://github.com/Congregalis/tiny-crawler/issues/1)
-- [] 加入自定义配置 **爬取深度**、**最大爬取页面数**，见 [issue#1](https://github.com/Congregalis/tiny-crawler/issues/1)
+- [ ] 引入 domain 来限制最主要的爬取范围，这不同于规则，见 [issue#1](https://github.com/Congregalis/tiny-crawler/issues/1)
+- [ ] 加入自定义配置 **爬取深度**、**最大爬取页面数**，见 [issue#1](https://github.com/Congregalis/tiny-crawler/issues/1)
 
 其实还有其他很多工作没完成，欢迎提 issue。
 <!-- - [] Feature 1

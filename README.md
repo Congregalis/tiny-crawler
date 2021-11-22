@@ -111,6 +111,21 @@ git clone https://github.com/Congregalis/tiny-crawler.git
 <!-- USAGE EXAMPLES -->
 ## 用法
 
+`Crawler` 作为启动类，首先通过 `build()` 方法构造，然后添加种子 `addSeed(String url)`，之后使用一系列的自定义配置方法，最后调用 `run()` 方法开启爬虫。
+
+*注：支持链式调用
+
+自定义配置方法：
+- thread(int num): 指定需要开启的线程
+- setExitSleepTime(int time): 指定爬虫没有获取新链接时，再过多少时间退出，单位为秒
+- setScheduler(Scheduler scheduler): 指定自定义 Scheduler
+- setDownloader(Downloader downloader): 指定自定义 Downloader
+- setProcessor(Processor processor): 指定自定义 Processor
+- setSaver(Saver saver): 指定自定义 Saver
+- addRule(String rule): 添加自定义规则，`rule` 为匹配链接的正则表达式
+
+### 示例
+
 爬取[我博客](https://congregalis.github.io/)中的所有文章对应的标题和正文示例如下：
 ```java
 // 种子url
@@ -131,7 +146,10 @@ Crawler.build().addSeed(seed).addRule("https://congregalis.github.io/" + dateReg
 <!-- ROADMAP -->
 ## 下一步工作
 
-还没想好，欢迎提 issue。
+- [] 引入 domain 来限制最主要的爬取范围，这不同于规则，见 [issue#1](https://github.com/Congregalis/tiny-crawler/issues/1)
+- [] 加入自定义配置 **爬取深度**、**最大爬取页面数**，见 [issue#1](https://github.com/Congregalis/tiny-crawler/issues/1)
+
+其实还有其他很多工作没完成，欢迎提 issue。
 <!-- - [] Feature 1
 - [] Feature 2
 - [] Feature 3

@@ -3,6 +3,7 @@ package core;
 import core.downloader.Downloader;
 import core.downloader.impl.HttpClientDownloader;
 import core.model.Page;
+import core.model.Seed;
 import core.processor.Processor;
 import core.processor.impl.SimpleTextProcessor;
 import core.saver.Saver;
@@ -29,6 +30,7 @@ public class Crawler {
 
     private int threadNum = 5;
     private int exitSleepTime = 30;
+    private int maxDepth = 20;
     private ThreadPoolExecutor poolExecutor;
     private final Lock newSeedLock = new ReentrantLock();
     private final Condition newSeedCondition = newSeedLock.newCondition();
@@ -48,6 +50,11 @@ public class Crawler {
         if (downloader == null) downloader = new HttpClientDownloader();
         if (processor == null) processor = new SimpleTextProcessor();
         if (saver == null) saver = new ConsoleSaver();
+    }
+
+    public Crawler maxDepth(int maxDepth) {
+        this.maxDepth = maxDepth;
+        return this;
     }
 
     public Crawler thread(int num) {
@@ -87,7 +94,7 @@ public class Crawler {
     }
 
     public Crawler addSeed(String url) {
-        scheduler.offer(url);
+        scheduler.offer(new Seed(url));
         return this;
     }
 
@@ -131,7 +138,7 @@ public class Crawler {
         logger.info("爬虫启动！");
 
         while (true) {
-            String seed = scheduler.poll();
+            Seed seed = scheduler.poll();
             if (seed == null && poolExecutor.getActiveCount() == 0) {
                 if (!waitNewSeed()) {
                     logger.debug("目前有 {} 个线程正在工作，已完成 {} 个任务，队列中还有 {} 个任务。", poolExecutor.getActiveCount(), poolExecutor.getCompletedTaskCount(), poolExecutor.getQueue().size());
@@ -149,10 +156,12 @@ public class Crawler {
                 }
             } else {
                 poolExecutor.execute(() -> {
-                    logger.debug("当前正在爬取：{}", seed);
-                    Page currPage = downloader.download(seed);
+                    logger.debug("当前正在爬取：{}", seed.toString());
+                    Page currPage = new Page(seed, downloader.download(seed.getUrl()));
                     processor.process(currPage);
-                    currPage.getNextSeeds().forEach(url -> scheduler.offer(url));
+                    currPage.getNextSeeds().forEach(next -> {
+                        if (next.getDepth() <= maxDepth) scheduler.offer(next);
+                    });
                     signalNewSeed();
                     saver.save(currPage);
                 });

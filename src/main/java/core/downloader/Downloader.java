@@ -4,5 +4,5 @@ import core.model.Page;
 
 public interface Downloader {
 
-    Page download(String url);
+    String download(String url);
 }

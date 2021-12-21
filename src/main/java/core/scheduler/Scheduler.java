@@ -1,8 +1,10 @@
 package core.scheduler;
 
+import core.model.Seed;
+
 public interface Scheduler {
 
-    void offer(String url);
+    void offer(Seed seed);
 
-    String poll();
+    Seed poll();
 }

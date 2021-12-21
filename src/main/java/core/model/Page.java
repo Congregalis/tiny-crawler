@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.Map;
 
 public class Page {
-    // 该页面的链接
-    private String url;
+    // 该页面的种子
+    private Seed seed;
     // 原始的 html 文档
     private String html;
     // 解析 html 后的 Jsoup 文档
     private Document document;
     // 该页面下的其他链接，即新种子
-    private List<String> nextSeeds;
+    private List<Seed> nextSeeds;
     // 存放处理后的结果，以键值对形式存放比较万金油
     private Map<Object, Object> results;
 
@@ -24,17 +24,21 @@ public class Page {
         results = new HashMap<>();
     }
 
-    public Page(String url, String html) {
-        this.url = url;
+    public Page(Seed seed, String html) {
+        this.seed = seed;
         this.html = html;
     }
 
     public String getUrl() {
-        return url;
+        return seed.getUrl();
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public Seed getSeed() {
+        return seed;
+    }
+
+    public void setSeed(Seed seed) {
+        this.seed = seed;
     }
 
     public String getHtml() {
@@ -53,11 +57,11 @@ public class Page {
         this.document = document;
     }
 
-    public List<String> getNextSeeds() {
+    public List<Seed> getNextSeeds() {
         return nextSeeds;
     }
 
-    public void setNextSeeds(List<String> nextSeeds) {
+    public void setNextSeeds(List<Seed> nextSeeds) {
         this.nextSeeds = nextSeeds;
     }
 

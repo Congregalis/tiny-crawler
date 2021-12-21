@@ -2,6 +2,10 @@ package example;
 
 import core.Crawler;
 
+/**
+ * 示例：爬取我博客下的连接
+ * 标签：多线程爬取 / 正则过滤
+ */
 public class SimpleExample {
     public static void main(String[] args) {
         // 种子url

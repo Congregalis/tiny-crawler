@@ -1,6 +1,7 @@
 package core.processor.impl;
 
 import core.model.Page;
+import core.model.Seed;
 import core.processor.Processor;
 import core.util.Md5Util;
 import org.jsoup.Jsoup;
@@ -39,7 +40,10 @@ public abstract class AbstractProcessor implements Processor {
         }
 
         links.removeIf(url -> !filter.match(url));
-        page.setNextSeeds(links);
+
+        List<Seed> nextSeeds = new ArrayList<>();
+        links.forEach((link) -> { nextSeeds.add(new Seed(link, page.getSeed().getDepth() + 1)); });
+        page.setNextSeeds(nextSeeds);
     }
 
     public void addRule(String rule) {

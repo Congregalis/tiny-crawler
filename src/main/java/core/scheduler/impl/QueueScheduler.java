@@ -1,5 +1,6 @@
 package core.scheduler.impl;
 
+import core.model.Seed;
 import core.scheduler.Scheduler;
 
 import java.util.HashSet;
@@ -9,18 +10,17 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class QueueScheduler implements Scheduler {
 
-    private BlockingQueue<String> queue = new LinkedBlockingQueue<>();
+    private BlockingQueue<Seed> queue = new LinkedBlockingQueue<>();
     private Set<String> set = new HashSet<>();
 
     @Override
-    public void offer(String url) {
-
-        if (set.add(url))
-            queue.offer(url);
+    public void offer(Seed seed) {
+        if (set.add(seed.getUrl()))
+            queue.offer(seed);
     }
 
     @Override
-    public String poll() {
+    public Seed poll() {
         return queue.poll();
     }
 }

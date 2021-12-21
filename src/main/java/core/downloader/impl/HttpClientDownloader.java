@@ -6,7 +6,7 @@ import core.util.HttpUtil;
 
 public class HttpClientDownloader implements Downloader {
     @Override
-    public Page download(String url) {
+    public String download(String url) {
         String html = "";
         try {
             html = HttpUtil.getInstance().doGet(url);
@@ -14,10 +14,10 @@ public class HttpClientDownloader implements Downloader {
             e.printStackTrace();
         }
 
-        return new Page(url, html);
+        return html;
     }
 
     public static void main(String[] args) {
-        System.out.println(new HttpClientDownloader().download("http://localhost:4000/about/").getHtml());
+        System.out.println(new HttpClientDownloader().download("https://congregalis.github.io/about/"));
     }
 }

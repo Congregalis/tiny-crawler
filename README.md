@@ -103,7 +103,26 @@
 
 ### 安装项目
 
-克隆该仓库
+1. 通过 maven 使用， `pom.xml` 中加入
+```xml
+<repositories>
+    <repository>
+        <id>github-tiny-crawler-repo</id>
+        <name>Tiny-Crawler on Github</name>
+        <url>https://congregalis.github.io/tiny-crawler/maven-repo/</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>com.github</groupId>
+        <artifactId>tiny-crawler</artifactId>
+        <version>0.1.0</version>
+    </dependency>
+</dependencies>
+```
+
+2. 通过源码使用，克隆该仓库
 ```sh
 git clone https://github.com/Congregalis/tiny-crawler.git
 ```

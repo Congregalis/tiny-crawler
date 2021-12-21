@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -29,9 +30,12 @@ public class Crawler {
     private Saver saver;
 
     private int threadNum = 5;
-    private int exitSleepTime = 30;
+    private int exitSleepTime = 10;
     private int maxDepth = 20;
+    private long maxPages = Long.MAX_VALUE;
+
     private ThreadPoolExecutor poolExecutor;
+    private AtomicLong pageCount;
     private final Lock newSeedLock = new ReentrantLock();
     private final Condition newSeedCondition = newSeedLock.newCondition();
 
@@ -45,6 +49,7 @@ public class Crawler {
 
     private void init() {
         thread(threadNum);
+        pageCount = new AtomicLong(0);
 
         if (scheduler == null) scheduler = new QueueScheduler();
         if (downloader == null) downloader = new HttpClientDownloader();
@@ -54,6 +59,16 @@ public class Crawler {
 
     public Crawler maxDepth(int maxDepth) {
         this.maxDepth = maxDepth;
+        return this;
+    }
+
+    public Crawler maxPages(int maxPages) {
+        this.maxPages = maxPages;
+        return this;
+    }
+
+    public Crawler maxPages(long maxPages) {
+        this.maxPages = maxPages;
         return this;
     }
 
@@ -138,17 +153,24 @@ public class Crawler {
         logger.info("爬虫启动！");
 
         while (true) {
+            if (poolExecutor.getActiveCount() + poolExecutor.getCompletedTaskCount() + poolExecutor.getQueue().size() >= maxPages && !poolExecutor.isShutdown()) {
+                logger.info("当前已达最大爬取页面数 {}，不再接收新的爬取任务...", maxPages);
+                poolExecutor.shutdown();
+
+                while (scheduler.poll() != null);
+            }
             Seed seed = scheduler.poll();
-            if (seed == null && poolExecutor.getActiveCount() == 0) {
+            if ((seed == null || poolExecutor.isShutdown()) && poolExecutor.getActiveCount() == 0) {
                 if (!waitNewSeed()) {
+                    logger.info("当前已爬取 " + pageCount.get() + " 个页面");
                     logger.debug("目前有 {} 个线程正在工作，已完成 {} 个任务，队列中还有 {} 个任务。", poolExecutor.getActiveCount(), poolExecutor.getCompletedTaskCount(), poolExecutor.getQueue().size());
                     continue;
                 }
 
-                logger.info("{} 秒内没有收到新的seed，爬虫工作完成，正在退出...", exitSleepTime);
+                logger.info("{} 秒内没有收到新的seed或已达自定义限制数，爬虫工作完成，已爬取 {} 个页面，正在退出...", exitSleepTime, pageCount.get());
                 poolExecutor.shutdown();
                 break;
-            } else if (seed == null) {
+            } else if (seed == null || poolExecutor.isShutdown()) {
                 try {
                     TimeUnit.MILLISECONDS.sleep(1000);
                 } catch (InterruptedException e) {
@@ -164,6 +186,7 @@ public class Crawler {
                     });
                     signalNewSeed();
                     saver.save(currPage);
+                    pageCount.getAndIncrement();
                 });
             }
         }

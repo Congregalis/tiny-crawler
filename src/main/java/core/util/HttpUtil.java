@@ -61,6 +61,7 @@ public class HttpUtil {
 
         try {
             // 执行请求并获得响应结果
+            // TODO：设置一下超时重试机制。这里经常发生 SSLException: Read timed out
             httpResponse = httpClient.execute(httpGet);
             // 获取返回结果
             if (httpResponse != null && httpResponse.getStatusLine() != null) {

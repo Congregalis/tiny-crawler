@@ -10,6 +10,7 @@ import core.saver.Saver;
 import core.saver.impl.ConsoleSaver;
 import core.scheduler.Scheduler;
 import core.scheduler.impl.QueueScheduler;
+import core.scheduler.impl.RedisScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,6 +120,19 @@ public class Crawler {
     }
 
     /**
+     * 退出方法
+     */
+    public void shutdown() {
+        // 线程池关闭
+        poolExecutor.shutdown();
+
+        // 若使用 Redis 调度器，则手动关闭 Redis 调度器
+        if (scheduler instanceof RedisScheduler) {
+            ((RedisScheduler) scheduler).shutdown();
+        }
+    }
+
+    /**
      * 等待新的 seed 加入队列，使主线程阻塞在此
      */
     public boolean waitNewSeed() {
@@ -168,7 +182,7 @@ public class Crawler {
                 }
 
                 logger.info("{} 秒内没有收到新的seed或已达自定义限制数，爬虫工作完成，已爬取 {} 个页面，正在退出...", exitSleepTime, pageCount.get());
-                poolExecutor.shutdown();
+                shutdown();
                 break;
             } else if (seed == null || poolExecutor.isShutdown()) {
                 try {

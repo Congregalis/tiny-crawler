@@ -1,6 +1,8 @@
 package core.model;
 
-public class Seed {
+import java.io.Serializable;
+
+public class Seed implements Serializable {
 
     String url;
     int depth;
@@ -37,5 +39,20 @@ public class Seed {
                 "url='" + url + '\'' +
                 ", depth=" + depth +
                 '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return this.url.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Seed) {
+            Seed seed = (Seed) obj;
+            return this.url.equals(seed.url);
+        }
+
+        return false;
     }
 }

@@ -14,4 +14,9 @@ public class ConsoleSaver implements Saver {
         }
         System.out.println("===============================================================");
     }
+
+    @Override
+    public void shutdown() {
+
+    }
 }

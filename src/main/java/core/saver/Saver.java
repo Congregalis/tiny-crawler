@@ -5,4 +5,6 @@ import core.model.Page;
 public interface Saver {
 
     void save(Page page);
+
+    void shutdown();
 }

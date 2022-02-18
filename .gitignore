@@ -3,5 +3,5 @@ target/
 
 src/main/java/example/Sketch.java
 .DS_Store
-result.txt
+result.*
 *.class

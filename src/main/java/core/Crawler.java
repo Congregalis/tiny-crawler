@@ -130,6 +130,9 @@ public class Crawler {
         if (scheduler instanceof RedisScheduler) {
             ((RedisScheduler) scheduler).shutdown();
         }
+
+        // Saver 收尾工作
+        saver.shutdown();
     }
 
     /**

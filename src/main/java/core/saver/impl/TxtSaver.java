@@ -46,4 +46,9 @@ public class TxtSaver implements Saver {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void shutdown() {
+
+    }
 }

@@ -3,6 +3,7 @@ package core.scheduler.impl;
 import core.model.Seed;
 import core.scheduler.Scheduler;
 import core.util.RedissonUtil;
+import org.redisson.api.RBloomFilter;
 import org.redisson.api.RQueue;
 import org.redisson.api.RSet;
 import org.redisson.api.RedissonClient;
@@ -14,24 +15,29 @@ public class RedisScheduler implements Scheduler {
 
     private RedissonClient redisClient;
     private RQueue<Seed> redisQueue;
-    private RSet<Seed> redisSet;
+    private RBloomFilter<Seed> redisBloomFilter;
 
     public RedisScheduler() {
         redisClient = RedissonUtil.getRedisson();
-        redisQueue = redisClient.getQueue(QUEUE_NAME);
-        redisSet = redisClient.getSet(SET_NAME);
+        initComponent();
     }
 
     public RedisScheduler(String address, int port, String password) {
         redisClient = RedissonUtil.getRedisson(address, port, password);
+        initComponent();
+    }
+
+    public void initComponent() {
         redisQueue = redisClient.getQueue(QUEUE_NAME);
-        redisSet = redisClient.getSet(SET_NAME);
+        redisBloomFilter = redisClient.getBloomFilter(SET_NAME);
+        redisBloomFilter.tryInit(55000000L, 0.03);
     }
 
     @Override
     public void offer(Seed seed) {
-        if (!redisSet.contains(seed)) {
+        if (!redisBloomFilter.contains(seed)) {
             redisQueue.offer(seed);
+            redisBloomFilter.add(seed);
         }
     }
 
@@ -41,6 +47,7 @@ public class RedisScheduler implements Scheduler {
     }
 
     public void shutdown() {
+        redisClient.getKeys().deleteByPattern("*tiny-crawler*");
         redisClient.shutdown();
     }
 }

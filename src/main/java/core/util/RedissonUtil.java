@@ -12,13 +12,21 @@ public class RedissonUtil {
     private static int port = 6379;
 
     public static RedissonClient getRedisson() {
-        return getRedisson(address, port, "");
+        return getRedisson(address, port);
+    }
+
+    public static RedissonClient getRedisson(String address, int port) {
+        Config config = new Config();
+        config.useSingleServer()
+                .setAddress("redis://" + address + ":" + port);
+
+        return Redisson.create(config);
     }
 
     public static RedissonClient getRedisson(String address, int port, String password) {
         Config config = new Config();
         config.useSingleServer()
-                .setAddress("redis://" + address + ":" + port) // redis://101.35.202.174:6379
+                .setAddress("redis://" + address + ":" + port)
                 .setPassword(password);
 
         return Redisson.create(config);

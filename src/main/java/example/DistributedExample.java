@@ -1,6 +1,7 @@
 package example;
 
 import core.Crawler;
+import core.saver.impl.JsonSaver;
 import core.scheduler.impl.RedisScheduler;
 
 public class DistributedExample {
@@ -12,6 +13,7 @@ public class DistributedExample {
 
         Crawler.build()
                 .setScheduler(new RedisScheduler())
+                .setSaver(new JsonSaver())
                 .addSeed(seed)
                 .addRule("https://congregalis.github.io/" + dateRegex + "/.*/")
                 .run();

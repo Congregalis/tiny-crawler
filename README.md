@@ -71,6 +71,13 @@
 <!-- ABOUT THE PROJECT -->
 ## 关于本项目
 
+特性：
+- 支持单机器上多线程高效爬取
+- 支持多机器分布式部署，进一步提高爬取速度
+- 支持自定义各组件，可扩展性强
+- 使用 Jsoup 解析
+- 代码易理解易学习，基于众多设计模式
+
 ![Product Name Screen Shot](https://congregalis.github.io/img/tiny-crawler/crawler_structure.png)
 
 本项目采用如上图所示结构来设计，保证了爬取的完整性。以下这几篇文章可能能让您更了解它。

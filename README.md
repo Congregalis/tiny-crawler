@@ -30,7 +30,7 @@
     <a href="https://github.com/Congregalis/tiny-crawler"><strong>查看文档 »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Congregalis/tiny-crawler/README.md#用法">演示</a>
+    <a href="https://github.com/Congregalis/tiny-crawler#%E7%94%A8%E6%B3%95">演示</a>
     ·
     <a href="https://github.com/Congregalis/tiny-crawler/issues">提交 Bug</a>
     ·

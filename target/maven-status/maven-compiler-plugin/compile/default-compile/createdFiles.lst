@@ -1,7 +1,11 @@
+example\DistributedExample.class
 core\downloader\Downloader.class
 core\model\Filter.class
 example\TodayInHistory$BaikeProcessor.class
+core\saver\impl\JsonSaver.class
 core\scheduler\Scheduler.class
+core\saver\impl\TxtSaver.class
+core\util\RedissonUtil.class
 core\util\Md5Util.class
 core\saver\impl\ConsoleSaver.class
 core\model\Seed.class
@@ -14,6 +18,7 @@ core\util\HttpUtil.class
 example\SimpleExample.class
 example\TodayInHistory.class
 core\downloader\impl\HttpClientDownloader.class
+core\scheduler\impl\RedisScheduler.class
 core\model\Page.class
 example\Sketch.class
 core\Crawler.class
